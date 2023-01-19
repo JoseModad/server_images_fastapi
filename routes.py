@@ -1,7 +1,8 @@
-from fastapi import APIRouter, UploadFile, File
+from fastapi import APIRouter, UploadFile, File, Form
 from fastapi.responses import FileResponse, JSONResponse
 
 from os import getcwd, remove
+from shutil import rmtree
 
 router = APIRouter()
 
@@ -33,5 +34,11 @@ def delete_file(name_file: str):
             "removed": False,
             "message": "File not found"
         }, status_code = 404)
+        
     
-    
+@router.delete("/folder")
+def delete_file(folder_name: str = Form(...)):    
+    rmtree(getcwd() + folder_name)
+    return JSONResponse(content={
+        "removed": True,            
+        }, status_code = 200)
